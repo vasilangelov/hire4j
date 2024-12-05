@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{layouts/root :: head (~{::title/text()})}">
+  <title>Admins</title>
+</head>
+  <body th:replace="~{layouts/root :: body (~{::.container})}" th:object="${admins}">
+    <div class="container">
+      <div class="is-flex is-justify-content-space-between is-align-items-center mb-4">
+        <h1 class="is-size-2">Admins</h1>
+
+        <a th:href="@{/admin/create}" class="button is-primary">Create Admin</a>
+      </div>
+
+      <table class="table is-fullwidth is-size-5">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr th:each="admin : ${admins}">
+            <td th:text="${admin.getFirstName()} + ' ' + ${admin.getLastName()}"></td>
+            <td class="has-actions-group">
+              <th:block th:text="${admin.getEmail()}" />
+
+              <div class="actions-group">
+                <form th:action="@{/admin/delete/{id}(id=${admin.getId()})}" method="post">
+                  <button class="button" title="Delete">
+                    <span class="icon is-small"><i class="bi bi-trash3-fill"></i></span>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

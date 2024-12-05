@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head th:insert="~{layouts/root :: head (~{::title/text()})}">
+    <title>Create Admin</title>
+  </head>
+  <body th:replace="~{layouts/root :: body (~{::main})}">
+    <main
+      class="is-flex-grow-1 is-display-flex is-flex-direction-column is-justify-content-center is-row-gap-4 container"
+      style="max-width: 600px"
+    >
+      <h1 class="has-text-centered is-size-2">Create Admin</h1>
+
+      <form
+        class="box is-flex is-flex-direction-column is-row-gap-8"
+        method="post"
+        th:action="@{/admin/create}"
+        th:object="${admin}"
+      >
+        <div>
+          <div class="columns field">
+            <div class="column">
+              <label class="label" for="firstName">First Name</label>
+              <div class="control">
+                <input
+                  class="input"
+                  id="firstName"
+                  name="firstName"
+                  placeholder="John"
+                  th:value="*{firstName}"
+                  type="text"
+                />
+              </div>
+              <p
+                class="has-text-danger"
+                th:if="${#fields.hasErrors('firstName')}"
+                th:text="${#fields.errors('firstName').getFirst()}"
+              ></p>
+            </div>
+            <div class="column">
+              <label class="label" for="lastName">Last Name</label>
+              <div class="control">
+                <input
+                  class="input"
+                  id="lastName"
+                  name="lastName"
+                  placeholder="Doe"
+                  th:value="*{lastName}"
+                  type="text"
+                />
+              </div>
+              <p
+                class="has-text-danger"
+                th:if="${#fields.hasErrors('lastName')}"
+                th:text="${#fields.errors('lastName').getFirst()}"
+              ></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="email">Email</label>
+            <div class="control">
+              <input
+                class="input"
+                id="email"
+                name="email"
+                placeholder="johndoe@example.com"
+                th:value="*{email}"
+                type="email"
+              />
+            </div>
+            <p
+              class="has-text-danger"
+              th:if="${#fields.hasErrors('email')}"
+              th:text="${#fields.errors('email').getFirst()}"
+            ></p>
+          </div>
+
+          <div class="field">
+            <label class="label" for="password">Password</label>
+            <div class="control">
+              <input
+                class="input"
+                id="password"
+                name="password"
+                placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                th:value="*{password}"
+                type="password"
+              />
+            </div>
+            <p
+              class="has-text-danger"
+              th:if="${#fields.hasErrors('password')}"
+              th:text="${#fields.errors('password').getFirst()}"
+            ></p>
+          </div>
+
+          <div class="field">
+            <label class="label" for="confirmPassword">Confirm Password</label>
+            <div class="control">
+              <input
+                class="input"
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                th:value="*{confirmPassword}"
+                type="password"
+              />
+            </div>
+            <p
+              class="has-text-danger"
+              th:if="${#fields.hasErrors('confirmPassword')}"
+              th:text="${#fields.errors('confirmPassword').getFirst()}"
+            ></p>
+          </div>
+        </div>
+
+        <div class="field">
+          <button class="button is-primary is-fullwidth" type="submit">
+            Create
+          </button>
+        </div>
+      </form>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head th:insert="~{layouts/root :: head (~{::title/text()})}">
+    <title>Sign Up</title>
+  </head>
+  <body th:replace="~{layouts/root :: body (~{::main})}">
+    <main
+      class="is-flex-grow-1 is-display-flex is-flex-direction-column is-justify-content-center is-row-gap-4 container"
+      style="max-width: 600px"
+    >
+      <h1 class="has-text-centered is-size-2">Sign Up</h1>
+
+      <form
+        class="box is-flex is-flex-direction-column is-row-gap-8"
+        method="post"
+        th:action="@{/account/sign-up}"
+        th:object="${signUpRequest}"
+      >
+        <div>
+          <div class="columns field">
+            <div class="column">
+              <label class="label" for="firstName">First Name</label>
+              <div class="control">
+                <input
+                  id="firstName"
+                  name="firstName"
+                  class="input"
+                  type="text"
+                  placeholder="John"
+                  th:value="*{firstName}"
+                />
+              </div>
+              <p
+                th:if="${#fields.hasErrors('firstName')}"
+                th:text="${#fields.errors('firstName').getFirst()}"
+                class="has-text-danger"
+              ></p>
+            </div>
+            <div class="column">
+              <label class="label" for="lastName">Last Name</label>
+              <div class="control">
+                <input
+                  id="lastName"
+                  name="lastName"
+                  class="input"
+                  type="text"
+                  placeholder="Doe"
+                  th:value="*{lastName}"
+                />
+              </div>
+              <p
+                th:if="${#fields.hasErrors('lastName')}"
+                th:text="${#fields.errors('lastName').getFirst()}"
+                class="has-text-danger"
+              ></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label" for="email">Email</label>
+            <div class="control">
+              <input
+                id="email"
+                name="email"
+                class="input"
+                type="email"
+                placeholder="johndoe@example.com"
+                th:value="*{email}"
+              />
+            </div>
+            <p
+              th:if="${#fields.hasErrors('email')}"
+              th:text="${#fields.errors('email').getFirst()}"
+              class="has-text-danger"
+            ></p>
+          </div>
+
+          <div class="field">
+            <label class="label" for="password">Password</label>
+            <div class="control">
+              <input
+                id="password"
+                name="password"
+                class="input"
+                type="password"
+                placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                th:value="*{password}"
+              />
+            </div>
+            <p
+              th:if="${#fields.hasErrors('password')}"
+              th:text="${#fields.errors('password').getFirst()}"
+              class="has-text-danger"
+            ></p>
+          </div>
+
+          <div class="field">
+            <label class="label" for="confirmPassword">Confirm Password</label>
+            <div class="control">
+              <input
+                id="confirmPassword"
+                name="confirmPassword"
+                class="input"
+                type="password"
+                placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
+                th:value="*{confirmPassword}"
+              />
+            </div>
+            <p
+              th:if="${#fields.hasErrors('confirmPassword')}"
+              th:text="${#fields.errors('confirmPassword').getFirst()}"
+              class="has-text-danger"
+            ></p>
+          </div>
+        </div>
+
+        <div class="field">
+          <button type="submit" class="button is-primary is-fullwidth">
+            Sign Up
+          </button>
+        </div>
+      </form>
+
+      <p class="has-text-centered">
+        Already have an account?
+        <a th:href="@{/account/sign-in}">Sign In</a> instead.
+      </p>
+    </main>
+  </body>
+</html>

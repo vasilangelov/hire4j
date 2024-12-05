@@ -1,0 +1,19 @@
+.has-actions-group {
+    position: relative;
+}
+
+.actions-group {
+    display: none;
+
+    position: absolute;
+    top: 50%;
+    right: 0;
+    z-index: 9999;
+
+    transform: translateY(-50%);
+    max-height: 100%;
+}
+
+tr:hover > td.has-actions-group > .actions-group {
+    display: block;
+}
