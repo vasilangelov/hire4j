@@ -4,127 +4,57 @@
     <title>Sign Up</title>
   </head>
   <body th:replace="~{layouts/root :: body (~{::main})}">
-    <main
-      class="is-flex-grow-1 is-display-flex is-flex-direction-column is-justify-content-center is-row-gap-4 container"
-      style="max-width: 600px"
-    >
-      <h1 class="has-text-centered is-size-2">Sign Up</h1>
+    <main class="grow-1 flex gap-12 container">
+      <div class="flex-1 flex flex-col py-8 min-w-1/2">
+        <div class="flex flex-col gap-12 mt-auto mx-auto w-full xl:w-1/2 max-w-150">
+          <h1>Sign Up</h1>
 
-      <form
-        class="box is-flex is-flex-direction-column is-row-gap-8"
-        method="post"
-        th:action="@{/account/sign-up}"
-        th:object="${signUpRequest}"
-      >
-        <div>
-          <div class="columns field">
-            <div class="column">
-              <label class="label" for="firstName">First Name</label>
-              <div class="control">
-                <input
-                  id="firstName"
-                  name="firstName"
-                  class="input"
-                  type="text"
-                  placeholder="John"
-                  th:value="*{firstName}"
-                />
+          <form class="flex flex-col gap-4" method="post" th:action="@{/account/sign-up}" th:object="${signUpRequest}">
+            <div class="flex flex-wrap gap-4">
+              <div class="input-container flex-1">
+                <label class="label" for="firstName">First Name</label>
+                <input id="firstName" name="firstName" class="input" type="text" placeholder="John" th:value="*{firstName}" />
+                <p th:if="${#fields.hasErrors('firstName')}" th:text="${#fields.errors('firstName').getFirst()}" class="input-helper-text is-danger"></p>
               </div>
-              <p
-                th:if="${#fields.hasErrors('firstName')}"
-                th:text="${#fields.errors('firstName').getFirst()}"
-                class="has-text-danger"
-              ></p>
-            </div>
-            <div class="column">
-              <label class="label" for="lastName">Last Name</label>
-              <div class="control">
-                <input
-                  id="lastName"
-                  name="lastName"
-                  class="input"
-                  type="text"
-                  placeholder="Doe"
-                  th:value="*{lastName}"
-                />
+
+              <div class="input-container flex-1">
+                <label class="label" for="lastName">Last Name</label>
+                <input id="lastName" name="lastName" class="input" type="text" placeholder="Doe" th:value="*{lastName}" />
+                <p th:if="${#fields.hasErrors('lastName')}" th:text="${#fields.errors('lastName').getFirst()}" class="input-helper-text is-danger"></p>
               </div>
-              <p
-                th:if="${#fields.hasErrors('lastName')}"
-                th:text="${#fields.errors('lastName').getFirst()}"
-                class="has-text-danger"
-              ></p>
             </div>
-          </div>
 
-          <div class="field">
-            <label class="label" for="email">Email</label>
-            <div class="control">
-              <input
-                id="email"
-                name="email"
-                class="input"
-                type="email"
-                placeholder="johndoe@example.com"
-                th:value="*{email}"
-              />
+            <div class="input-container">
+              <label class="label" for="email">Email</label>
+              <input id="email" name="email" class="input" type="email" placeholder="johndoe@example.com" th:value="*{email}" />
+              <p th:if="${#fields.hasErrors('email')}" th:text="${#fields.errors('email').getFirst()}" class="input-helper-text is-danger"></p>
             </div>
-            <p
-              th:if="${#fields.hasErrors('email')}"
-              th:text="${#fields.errors('email').getFirst()}"
-              class="has-text-danger"
-            ></p>
-          </div>
 
-          <div class="field">
-            <label class="label" for="password">Password</label>
-            <div class="control">
-              <input
-                id="password"
-                name="password"
-                class="input"
-                type="password"
-                placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
-                th:value="*{password}"
-              />
+            <div class="input-container">
+              <label class="label" for="password">Password</label>
+              <input id="password" name="password" class="input" type="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" th:value="*{password}" />
+              <p th:if="${#fields.hasErrors('password')}" th:text="${#fields.errors('password').getFirst()}" class="input-helper-text is-danger"></p>
             </div>
-            <p
-              th:if="${#fields.hasErrors('password')}"
-              th:text="${#fields.errors('password').getFirst()}"
-              class="has-text-danger"
-            ></p>
-          </div>
 
-          <div class="field">
-            <label class="label" for="confirmPassword">Confirm Password</label>
-            <div class="control">
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                class="input"
-                type="password"
-                placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"
-                th:value="*{confirmPassword}"
-              />
+            <div class="input-container">
+              <label class="label" for="confirmPassword">Confirm Password</label>
+              <input id="confirmPassword" name="confirmPassword" class="input" type="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" th:value="*{confirmPassword}" />
+              <p th:if="${#fields.hasErrors('confirmPassword')}" th:text="${#fields.errors('confirmPassword').getFirst()}" class="input-helper-text is-danger"></p>
             </div>
-            <p
-              th:if="${#fields.hasErrors('confirmPassword')}"
-              th:text="${#fields.errors('confirmPassword').getFirst()}"
-              class="has-text-danger"
-            ></p>
-          </div>
+
+            <button type="submit" class="button">Sign Up</button>
+          </form>
         </div>
 
-        <div class="field">
-          <button type="submit" class="button is-primary is-fullwidth">
-            Sign Up
-          </button>
-        </div>
-      </form>
+        <p class="mt-auto text-center">
+          Already have an account?
+          <a class="link" th:href="@{/account/sign-in}">Sign In</a> instead.
+        </p>
+      </div>
 
-      <p class="has-text-centered">
-        Already have an account?
-        <a th:href="@{/account/sign-in}">Sign In</a> instead.
-      </p>
+      <div class="hidden flex-1 lg:flex justify-center items-center w-full">
+        <img src="/media/sign-up.svg" alt="" class="w-full max-w-150" />
+      </div>
     </main>
   </body>
 </html>

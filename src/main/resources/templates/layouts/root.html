@@ -1,72 +1,47 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
   <head th:fragment="head (title)" th:with="content=~{_}">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title><th:block th:if="${title}"> <th:block th:text="${title}" /> | </th:block>hire4j</title>
 
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
-    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/styles.css" />
+    <link href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css" rel="stylesheet" />
+
+    <link href="/css/styles.css" rel="stylesheet" />
 
     <th:block th:if="${content}">
       <th:block th:replace="${content}" />
     </th:block>
   </head>
-  <body
-    class="is-flex is-flex-direction-column mb-6"
-    style="min-height: calc(100vh - 15rem)"
-    th:fragment="body (content)"
-  >
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <a class="navbar-item" th:href="@{/}"> hire4j </a>
-        <a
-          role="button"
-          class="navbar-burger"
-          aria-label="menu"
-          aria-expanded="false"
-          data-target="navbar"
-        >
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
-      </div>
-      <div id="navbar" class="navbar-menu">
-        <div
-          class="navbar-start"
-          th:with="Role=${T(com.github.vasilangelov.hire4j.model.Role)}"
-        >
-          <a th:href="@{/}" class="navbar-item">Home</a>
+  <body th:fragment="body (content)">
+    <header>
+      <nav class="navigation">
+        <div class="navigation-group">
+          <a th:href="@{/}" class="navigation-brand">hire4j</a>
+        </div>
 
-          <th:block th:if="${#authorization.expression('hasRole(''' + Role.SUPER_ADMIN + ''')')}">
-            <a th:href="@{/admin/all}" class="navbar-item">Admins</a>
+        <div class="navigation-group" th:with="Role=${T(com.github.vasilangelov.hire4j.model.Role)}">
+          <a class="navigation-item" th:with="route=@{/}" th:href="${route}" th:classappend="${requestURI == route} ? 'is-active'">Home</a>
+        </div>
+
+        <div class="navigation-group">
+          <th:block sec:authorize="isAnonymous()">
+            <a th:href="@{/account/sign-in}" class="button is-ghost">Sign In</a>
+            <a th:href="@{/account/sign-up}" class="button">Sign Up</a>
+          </th:block>
+
+          <th:block sec:authorize="isAuthenticated()">
+            <form th:action="@{/account/sign-out}" method="post">
+              <button type="submit" class="button is-ghost">Sign Out</button>
+            </form>
           </th:block>
         </div>
-        <div class="navbar-end">
-          <div class="navbar-item">
-            <div class="buttons">
-              <th:block sec:authorize="isAuthenticated()">
-                <form th:action="@{/account/sign-out}" method="post">
-                  <button type="submit" class="button">Sign Out</button>
-                </form>
-              </th:block>
-
-              <th:block sec:authorize="isAnonymous()">
-                <a th:href="@{/account/sign-in}" class="button">Sign In</a>
-                <a th:href="@{/account/sign-up}" class="button is-primary">
-                  Sign Up
-                </a>
-              </th:block>
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
+      </nav>
+    </header>
 
     <div class="container is-flex-grow-0 mb-4" th:if="${message}">
       <div class=" notification is-danger" th:text="${message}"></div>

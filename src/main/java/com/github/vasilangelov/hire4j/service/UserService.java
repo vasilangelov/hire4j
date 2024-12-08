@@ -1,6 +1,5 @@
 package com.github.vasilangelov.hire4j.service;
 
-import com.github.vasilangelov.hire4j.dto.AdminResponse;
 import com.github.vasilangelov.hire4j.dto.CreateUserRequest;
 import com.github.vasilangelov.hire4j.model.Role;
 import com.github.vasilangelov.hire4j.model.User;
@@ -62,26 +61,10 @@ public class UserService {
         return ServiceResult.success();
     }
 
-    public ServiceResult createSuperAdmin(String email, String password) {
+    public void createSuperAdmin(String email, String password) {
         Role superAdminRole = this.roleRepository.findByName(Role.SUPER_ADMIN).orElseThrow();
 
-        this.userRepository.save(new User(email, "SuperAdmin", "", this.passwordEncoder.encode(password), superAdminRole));
-
-        return ServiceResult.success();
-    }
-
-    public Iterable<AdminResponse> getAdmins() {
-        return this.userRepository.findAllByRoleName(Role.ADMIN);
-    }
-
-    public ServiceResult deleteUser(Long id) {
-        if (!this.userRepository.existsById(id)) {
-            return ServiceResult.failure("User does not exist.");
-        }
-
-        this.userRepository.deleteById(id);
-
-        return ServiceResult.success();
+        this.userRepository.save(new User(email, "Super", "Admin", this.passwordEncoder.encode(password), superAdminRole));
     }
 
 }

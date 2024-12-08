@@ -13,7 +13,7 @@ import java.util.Set;
 @Component
 public class RoleSeeder extends Seeder {
 
-    private static final String[] roles = { Role.USER, Role.ADMIN, Role.SUPER_ADMIN};
+    private static final String[] roles = { Role.SUPER_ADMIN, Role.ADMIN, Role.USER };
 
     private final RoleRepository roleRepository;
 
