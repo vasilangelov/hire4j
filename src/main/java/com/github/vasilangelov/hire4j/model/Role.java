@@ -12,6 +12,15 @@ public class Role {
 
     public static final String SUPER_ADMIN = "ROLE_SUPER_ADMIN";
 
+    public static String getNormalizedRoleName(String roleName) {
+        return switch (roleName) {
+            case USER -> "User";
+            case ADMIN -> "Admin";
+            case SUPER_ADMIN -> "Super Admin";
+            default -> "Unknown Role";
+        };
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private byte id;

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head th:insert="~{layouts/root :: head (~{::title/text()})}">
+  <head th:insert="~{layouts/root :: head (title=~{::title/text()})}">
     <title>Sign Up</title>
   </head>
-  <body th:replace="~{layouts/root :: body (~{::main})}">
+  <body th:replace="~{layouts/root :: body (content=~{::main})}">
     <main class="grow-1 flex gap-12 container">
       <div class="flex-1 flex flex-col py-8 min-w-1/2">
         <div class="flex flex-col gap-12 mt-auto mx-auto w-full xl:w-1/2 max-w-150">

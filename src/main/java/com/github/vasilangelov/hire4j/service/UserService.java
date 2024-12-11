@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -65,6 +67,22 @@ public class UserService {
         Role superAdminRole = this.roleRepository.findByName(Role.SUPER_ADMIN).orElseThrow();
 
         this.userRepository.save(new User(email, "Super", "Admin", this.passwordEncoder.encode(password), superAdminRole));
+    }
+
+    public ServiceResult deleteUserByEmail(String email) {
+        Optional<User> user = this.userRepository.findByEmail(email);
+
+        if (user.isEmpty()) {
+            return ServiceResult.failure("User with this email does not exist.");
+        }
+
+        if (Objects.equals(user.get().getRole().getName(), Role.SUPER_ADMIN)) {
+            return ServiceResult.failure("Super Admin role cannot be deleted.");
+        }
+
+        this.userRepository.deleteUserByEmail(email);
+
+        return ServiceResult.success();
     }
 
 }

@@ -34,7 +34,8 @@ public class SecurityConfig {
                         .logoutUrl("/account/sign-out")
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID"))
+                        .deleteCookies("JSESSIONID")
+                        .permitAll())
                 .build();
     }
 
