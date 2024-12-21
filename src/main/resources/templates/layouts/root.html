@@ -35,6 +35,7 @@
               </button>
 
               <div class="dropdown-content" aria-labelledby="administration-dropdown-toggle">
+                <a class="dropdown-item" th:with="route=@{/admin/organizations}" th:href="${route}">Organizations</a>
                 <a class="dropdown-item" th:with="route=@{/admin/users}" th:href="${route}">Users</a>
               </div>
             </div>

@@ -1,14 +1,18 @@
 package com.github.vasilangelov.hire4j.controller;
 
+import com.github.vasilangelov.hire4j.dto.CreateOrganizationRequest;
 import com.github.vasilangelov.hire4j.dto.CreateUserRequest;
+import com.github.vasilangelov.hire4j.dto.OrganizationView;
 import com.github.vasilangelov.hire4j.dto.UserView;
 import com.github.vasilangelov.hire4j.model.Role;
+import com.github.vasilangelov.hire4j.repository.OrganizationRepository;
 import com.github.vasilangelov.hire4j.repository.UserRepository;
+import com.github.vasilangelov.hire4j.service.OrganizationService;
 import com.github.vasilangelov.hire4j.service.UserService;
 import com.github.vasilangelov.hire4j.util.BindingResultUtils;
+import com.github.vasilangelov.hire4j.util.RedirectAttributesUtils;
 import com.github.vasilangelov.hire4j.util.controller.AllowAdmin;
 import com.github.vasilangelov.hire4j.util.controller.AllowSuperAdmin;
-import com.github.vasilangelov.hire4j.util.service.ServiceError;
 import com.github.vasilangelov.hire4j.util.service.ServiceResult;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -23,23 +27,27 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import java.util.Collections;
 
 @Controller
 public class AdminController {
 
     private final UserRepository userRepository;
     private final UserService userService;
+    private final OrganizationRepository organizationRepository;
+    private final OrganizationService organizationService;
 
-    public AdminController(UserRepository userRepository, UserService userService) {
+    public AdminController(UserRepository userRepository, UserService userService, OrganizationRepository organizationRepository, OrganizationService organizationService) {
         this.userRepository = userRepository;
         this.userService = userService;
+        this.organizationRepository = organizationRepository;
+        this.organizationService = organizationService;
     }
 
     @AllowAdmin
     @GetMapping("/admin/users")
     public String users(
-            @RequestParam(name = "search", defaultValue = "") String email,
+            @RequestParam(defaultValue = "") String email,
             @RequestParam(defaultValue = "1") int page,
             Model model) {
         Page<UserView> users = this.userRepository.findAllByEmailStartingWith(email, PageRequest.of(Math.max(page - 1, 0), 10, Sort.by("email").ascending()));
@@ -55,9 +63,7 @@ public class AdminController {
         ServiceResult deleteUserResult = this.userService.deleteUserByEmail(email);
 
         if (!deleteUserResult.isSuccess()) {
-            List<String> errors = deleteUserResult.getErrors().stream().map(ServiceError::getMessage).toList();
-
-            redirectAttributes.addFlashAttribute("errors", errors);
+            RedirectAttributesUtils.bindServiceResultErrors(redirectAttributes, deleteUserResult);
 
             return "redirect:/admin/users";
         }
@@ -93,6 +99,92 @@ public class AdminController {
         redirectAttributes.addFlashAttribute("info", "Admin created successfully.");
 
         return "redirect:/admin/users";
+    }
+
+    @AllowAdmin
+    @GetMapping("/admin/organizations")
+    public String organizations(@RequestParam(defaultValue = "") String organization, @RequestParam(defaultValue = "1") int page, Model model) {
+        Page<OrganizationView> organizations = this.organizationRepository.findByNameStartingWithIgnoreCase(organization, PageRequest.of(Math.max(page - 1, 0), 10, Sort.by("name").ascending()));
+
+        model.addAttribute("organizations", organizations);
+
+        return "admin/organizations";
+    }
+
+    @AllowAdmin
+    @GetMapping("/admin/create-organization")
+    public String createOrganization(Model model) {
+        model.addAttribute("organization", new CreateOrganizationRequest());
+
+        return "admin/create-organization";
+    }
+
+    @AllowAdmin
+    @PostMapping("/admin/create-organization")
+    public String createOrganization(@Valid @ModelAttribute("organization") CreateOrganizationRequest createOrganizationRequest, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            return "/admin/create-organization";
+        }
+
+        ServiceResult serviceResult = this.organizationService.createOrganization(createOrganizationRequest);
+
+        if (!serviceResult.isSuccess()) {
+            BindingResultUtils.addResultErrorsToBindingResult(bindingResult, serviceResult);
+
+            return "/admin/create-organization";
+        }
+
+        redirectAttributes.addFlashAttribute("info", "Organization created successfully.");
+
+        return "redirect:/admin/organizations";
+    }
+
+    @AllowAdmin
+    @PostMapping("/admin/delete-organization")
+    public String deleteOrganization(Long id, RedirectAttributes redirectAttributes) {
+        if (!this.organizationRepository.existsById(id)) {
+            redirectAttributes.addFlashAttribute("errors", Collections.singleton("Organization does not exist."));
+
+            return "redirect:/admin/organizations";
+        }
+
+        this.organizationRepository.deleteById(id);
+
+        redirectAttributes.addFlashAttribute("info", "Organization deleted successfully.");
+
+        return "redirect:/admin/organizations";
+    }
+
+    @AllowAdmin
+    @PostMapping("/admin/add-organization-maintainer")
+    public String addOrganizationMaintainer(Long id, String email, RedirectAttributes redirectAttributes) {
+        ServiceResult addMaintainerByEmailResult = this.organizationService.addMaintainerByEmail(id, email);
+
+        if (!addMaintainerByEmailResult.isSuccess()) {
+            RedirectAttributesUtils.bindServiceResultErrors(redirectAttributes, addMaintainerByEmailResult);
+
+            return "redirect:/admin/organizations";
+        }
+
+        redirectAttributes.addFlashAttribute("info", "User added to organization successfully.");
+
+        return "redirect:/admin/organizations";
+    }
+
+    @AllowAdmin
+    @PostMapping("/admin/remove-organization-maintainer")
+    public String removeOrganizationMaintainer(Long id, String email, RedirectAttributes redirectAttributes) {
+        ServiceResult removeMaintainerFromOrganizationResult = this.organizationService.removeMaintainerFromOrganization(id, email);
+
+        if (!removeMaintainerFromOrganizationResult.isSuccess()) {
+            RedirectAttributesUtils.bindServiceResultErrors(redirectAttributes, removeMaintainerFromOrganizationResult);
+
+            return "redirect:/admin/organizations";
+        }
+
+        redirectAttributes.addFlashAttribute("info", "Maintainer removed from organization successfully.");
+
+        return "redirect:/admin/organizations";
     }
 
 }

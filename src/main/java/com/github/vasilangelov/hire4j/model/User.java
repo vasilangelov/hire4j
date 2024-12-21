@@ -27,6 +27,10 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "organization_id")
+    private Organization organization;
+
     public User() {
     }
 
@@ -36,6 +40,11 @@ public class User {
         this.lastName = lastName;
         this.password = password;
         this.role = role;
+    }
+
+    public User(String email, String firstName, String lastName, String password, Role role, Organization organization) {
+        this(email, firstName, lastName, password, role);
+        this.organization = organization;
     }
 
     public long getId() {
@@ -84,6 +93,14 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Organization getOrganization() {
+        return this.organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
 }

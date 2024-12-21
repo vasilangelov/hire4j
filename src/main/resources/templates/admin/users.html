@@ -22,10 +22,10 @@
           <div class="flex justify-between gap-4 items-end">
             <form class="input-container w-fit" method="get" th:href="@{/admin/users}">
               <label for="email-search" class="label">Email</label>
-              <input id="email-search" type="search" name="search" class="input" th:value="${param.search}" />
+              <input id="email-search" type="search" name="email" class="input" th:value="${param.email}" />
             </form>
 
-            <a class="button is-danger has-icon" th:if="${!#strings.isEmpty(param.search)}" th:href="@{/admin/users}">
+            <a class="button is-danger has-icon" th:if="${!#strings.isEmpty(param.email)}" th:href="@{/admin/users}">
               <i class="bi bi-funnel-fill"></i> Clear Filters
             </a>
           </div>
@@ -63,7 +63,7 @@
           </div>
         </div>
 
-        <th:block th:replace="~{fragment/pagination :: pagination (totalPages=${users.getTotalPages()},url=@{/admin/users(email=${param.search})})}"></th:block>
+        <th:block th:replace="~{fragment/pagination :: pagination (totalPages=${users.getTotalPages()},url=@{/admin/users(email=${param.email})})}"></th:block>
 
         <div id="delete-user" class="dialog">
           <div role="dialog" aria-labelledby="delete-user-title" aria-describedby="delete-user-description" class="dialog-content">
