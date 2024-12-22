@@ -1,3 +1,18 @@
+function requestAnimationAfter(callback, timeoutMilliseconds) {
+    let initialTimestamp;
+
+    requestAnimationFrame(function checkAnimationLoop(timestamp) {
+        initialTimestamp ??= timestamp;
+        const elapsed = timestamp - initialTimestamp;
+
+        if (elapsed >= timeoutMilliseconds) {
+            return callback();
+        }
+
+        requestAnimationFrame(checkAnimationLoop);
+    });
+}
+
 const CLICK_ACTION_MAP = Object.freeze({
     "toggle-dropdown": {
         accepts: [],
@@ -50,7 +65,45 @@ const CLICK_ACTION_MAP = Object.freeze({
 
             targetElement.classList.add("is-open");
        }
-    }
+    },
+    "open-drawer": {
+        accepts: ["targetSelector"],
+        trigger: ({ targetSelector }) => {
+            const targetElement = document.querySelector(targetSelector);
+
+            if (targetElement === null) {
+                return;
+            }
+
+            document.body.overflow = "hidden";
+
+            targetElement.classList.add("is-visible");
+
+            requestAnimationAfter(() => {
+                targetElement.classList.add("is-open");
+            }, 0);
+        }
+    },
+    "close-drawer": {
+        accepts: [],
+        trigger: ({ $event }) => {
+            const targetElement = $event.currentTarget;
+
+            const isOutsideClick = targetElement === $event.target;
+
+            if (!isOutsideClick) {
+                return;
+            }
+
+            targetElement.classList.remove("is-open");
+
+            requestAnimationAfter(() => {
+                targetElement.classList.remove("is-visible");
+
+                document.body.overflow = null;
+            }, 200);
+        }
+    },
 });
 
 function extractActionValues(element, keys) {

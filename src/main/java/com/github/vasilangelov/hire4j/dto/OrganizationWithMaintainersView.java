@@ -2,7 +2,7 @@ package com.github.vasilangelov.hire4j.dto;
 
 import java.util.List;
 
-public interface OrganizationView {
+public interface OrganizationWithMaintainersView {
 
     long getId();
 

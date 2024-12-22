@@ -63,6 +63,7 @@
     --app-leading-2xl: 2.75rem;
 
     --app-z-index-dropdown: 50;
+    --app-z-index-drawer: 100;
     --app-z-index-dialog: 9999;
 }
 
@@ -215,7 +216,7 @@ body {
     position: absolute;
     top: calc(100% + 0.5rem);
     left: 0;
-    z-index: var(--app-z-index-dialog);
+    z-index: var(--app-z-index-dropdown);
 
     padding: 0.5rem;
     border: 1px solid var(--app-color-neutral-100);
@@ -521,14 +522,55 @@ table.table > tbody > tr > td {
     width: 100%;
 }
 
-.pagination {
+.drawer {
+    --app-drawer-width: min(37.5rem, 100%);
 
+    display: none;
+
+    content: "";
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--app-z-index-drawer);
+
+    width: 100%;
+    height: 100%;
+
+    background-color: var(--app-color-transparent);
+
+    transition: background-color 200ms ease-in;
 }
 
-.pagination-list {
-    display: flex;
+.drawer-content {
+    display: none;
 
-    list-style-type: none;
+    padding: 2.5rem;
+
+    position: fixed;
+    top: 0;
+    left: 100%;
+    z-index: var(--app-z-index-drawer);
+
+    width: var(--app-drawer-width);
+    height: 100%;
+
+    background-color: var(--app-color-background);
+
+    transition: left 200ms ease-in;
+}
+
+.drawer.is-visible,
+.drawer.is-visible > .drawer-content {
+    display: block;
+}
+
+.drawer.is-open {
+    background-color: var(--app-color-neutral-950-o-75);
+}
+
+.drawer.is-open > .drawer-content {
+    left: calc(100% - var(--app-drawer-width));
 }
 
 .hidden {
@@ -581,6 +623,10 @@ table.table > tbody > tr > td {
 
 .gap-4 {
     gap: 1rem;
+}
+
+.gap-10 {
+    gap: 2.5rem;
 }
 
 .gap-12 {

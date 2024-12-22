@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{layouts/root :: head (title=${organization.getName()})}">
+    <title>Organization</title>
+  </head>
+  <body th:replace="~{layouts/root :: body(content=~{::#page-root})}">
+    <div id="page-root" class="container">
+      <div class="flex justify-between items-start">
+        <div>
+          <h1 th:text="${organization.getName()}"></h1>
+          <p class="subtitle">Manage organization</p>
+        </div>
+
+        <button class="button has-icon" data-click-action="open-drawer" data-target-selector="#edit-organization-drawer">
+          <i class="bi bi-building-fill-gear"></i> Edit
+        </button>
+      </div>
+
+      <form
+        id="edit-organization-drawer"
+        method="post"
+        class="drawer"
+        data-click-action="close-drawer"
+        th:object="${editOrganizationRequest}"
+        th:action="@{/organization/{id}/edit(id=${organization.getId()})}"
+        th:classappend="${#fields.hasErrors()} ? 'is-visible is-open'"
+      >
+        <div class="drawer-content">
+          <div class="flex flex-col gap-10">
+            <h2>Edit <th:block th:text="${organization.getName()}"></th:block></h2>
+
+            <div class="flex flex-col gap-4">
+              <div class="input-container">
+                <label class="label" for="name">Name</label>
+                <input id="name" name="name" class="input" type="text" placeholder="My Organization" th:value="*{name}" />
+                <p th:if="${#fields.hasErrors('name')}" th:text="${#fields.errors('name').getFirst()}" class="input-helper-text is-danger"></p>
+              </div>
+
+              <div class="input-container">
+                <label class="label" for="description">Description</label>
+                <textarea id="description" name="description" class="input" placeholder="An aspiring organization" th:text="*{description}"></textarea>
+                <p th:if="${#fields.hasErrors('description')}" th:text="${#fields.errors('description').getFirst()}" class="input-helper-text is-danger"></p>
+              </div>
+
+              <button type="submit" class="button">Edit</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

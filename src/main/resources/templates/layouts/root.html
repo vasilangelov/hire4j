@@ -28,18 +28,29 @@
         <div class="navigation-group">
           <a class="navigation-item" th:with="route=@{/}" th:href="${route}" th:classappend="${@thymeleafService.getRequestURI() == route} ? 'is-active'">Home</a>
 
-          <th:block th:if="${@thymeleafService.isInRole(Role.ADMIN)}">
-            <div class="navigation-item dropdown">
-              <button id="administration-dropdown-toggle" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-click-action="toggle-dropdown">
-                Admin <i class="bi bi-chevron-down dropdown-toggle-icon"></i>
-              </button>
-
-              <div class="dropdown-content" aria-labelledby="administration-dropdown-toggle">
-                <a class="dropdown-item" th:with="route=@{/admin/organizations}" th:href="${route}">Organizations</a>
-                <a class="dropdown-item" th:with="route=@{/admin/users}" th:href="${route}">Users</a>
-              </div>
-            </div>
+          <th:block
+            th:if="${@thymeleafService.getUserOrganization().isPresent()}"
+            th:with="organization=${@thymeleafService.getUserOrganization().get()}"
+          >
+            <a
+              class="navigation-item"
+              th:with="route=@{/organization/{id}(id=${organization.getId()})}"
+              th:href="${route}"
+              th:text="${organization.getName()}"
+              th:classappend="${@thymeleafService.getRequestURI() == route} ? 'is-active'"
+            ></a>
           </th:block>
+
+          <div class="navigation-item dropdown" th:if="${@thymeleafService.isInRole(Role.ADMIN)}">
+            <button id="administration-dropdown-toggle" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false" data-click-action="toggle-dropdown">
+              Admin <i class="bi bi-chevron-down dropdown-toggle-icon"></i>
+            </button>
+
+            <div class="dropdown-content" aria-labelledby="administration-dropdown-toggle">
+              <a class="dropdown-item" th:with="route=@{/admin/organizations}" th:href="${route}">Organizations</a>
+              <a class="dropdown-item" th:with="route=@{/admin/users}" th:href="${route}">Users</a>
+            </div>
+          </div>
         </div>
 
         <div class="navigation-group">

@@ -61,6 +61,9 @@
                         th:data-organization-id="${organization.getId()}">
                         <i class="bi bi-person-fill-add"></i>
                       </button>
+                      <a class="button is-1/1" th:href="@{/admin/edit-organization/{id}(id=${organization.getId()})}">
+                        <i class="bi bi-building-fill-gear"></i>
+                      </a>
                       <button
                         class="button is-1/1 is-danger"
                         data-click-action="open-dialog"
