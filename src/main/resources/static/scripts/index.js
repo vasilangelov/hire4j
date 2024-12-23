@@ -146,8 +146,76 @@ function registerClickHandlers() {
         });
 }
 
+function registerPillListHandlers() {
+    document.querySelectorAll(`input[data-pill-list-target-selector]`)
+        .forEach((input) => {
+            const targetSelector = input.dataset.pillListTargetSelector;
+            const pillInputName = input.dataset.pillListInputName;
+            const targetElement = document.querySelector(targetSelector);
+
+            if (targetElement === null) {
+                return;
+            }
+
+            function handleInput() {
+                if (!/\s$/m.test(input.value)) {
+                    return;
+                }
+
+                const value = input.value.trim();
+
+                const createdPillsArray = Array.from(targetElement.querySelectorAll(".pill > input"))
+                    .map((pill) => pill.value.trim());
+                const createdPillsSet = new Set(createdPillsArray);
+
+                if (value === "" || createdPillsSet.has(value)) {
+                    input.value = input.value.trim();
+                    return;
+                }
+
+                const pill = document.createElement("div");
+                pill.textContent = value;
+                pill.classList.add("pill");
+
+                const hiddenInput = document.createElement("input");
+                hiddenInput.type = "hidden";
+                hiddenInput.name = pillInputName;
+                hiddenInput.value = value;
+
+                pill.appendChild(hiddenInput);
+
+                const removeIcon = document.createElement("i");
+                removeIcon.classList.add("bi", "bi-x");
+
+                const removeButton = document.createElement("button");
+                removeButton.type = "button";
+                removeButton.classList.add("pill-remove-button");
+
+                removeButton.appendChild(removeIcon);
+                pill.appendChild(removeButton);
+
+                targetElement.appendChild(pill);
+
+                input.value = "";
+            }
+
+            input.addEventListener("input", handleInput);
+        });
+
+    window.addEventListener("click", (event) => {
+        const { target } = event;
+
+        if (!target.classList.contains("pill-remove-button")) {
+            return;
+        }
+
+        target.parentElement.remove();
+    });
+}
+
 function main() {
     registerClickHandlers();
+    registerPillListHandlers();
 }
 
 document.addEventListener("DOMContentLoaded", main, { once: true });
