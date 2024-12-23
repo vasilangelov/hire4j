@@ -5,12 +5,12 @@ import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "organization")
+@Table(name = "organizations")
 public class Organization {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     private String name;
 
@@ -21,12 +21,21 @@ public class Organization {
     @JoinColumn(name = "organization_id")
     private Set<User> maintainers;
 
+    @OneToMany
+    @JoinColumn(name = "organization_id")
+    private Set<JobListing> jobListings;
+
     public Organization() {}
 
     public Organization(String name, String description, Set<User> maintainers) {
         this.name = name;
         this.description = description;
         this.maintainers = maintainers;
+    }
+
+    public Organization(String name, String description, Set<User> maintainers, Set<JobListing> jobListings) {
+        this(name, description, maintainers);
+        this.jobListings = jobListings;
     }
 
     public Long getId() {
@@ -61,4 +70,12 @@ public class Organization {
         this.maintainers = maintainers;
     }
 
+    public Set<JobListing> getJobListings() {
+        return this.jobListings;
+    }
+
+    public void setJobListings(Set<JobListing> jobListings) {
+        this.jobListings = jobListings;
+    }
+    
 }

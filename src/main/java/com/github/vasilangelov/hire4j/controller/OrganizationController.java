@@ -1,10 +1,14 @@
 package com.github.vasilangelov.hire4j.controller;
 
+import com.github.vasilangelov.hire4j.dto.CreateJobListingRequest;
 import com.github.vasilangelov.hire4j.dto.EditOrganizationRequest;
 import com.github.vasilangelov.hire4j.model.Organization;
 import com.github.vasilangelov.hire4j.repository.OrganizationRepository;
 import com.github.vasilangelov.hire4j.repository.UserRepository;
+import com.github.vasilangelov.hire4j.service.JobListingService;
+import com.github.vasilangelov.hire4j.util.BindingResultUtils;
 import com.github.vasilangelov.hire4j.util.controller.AllowUser;
+import com.github.vasilangelov.hire4j.util.service.ServiceResult;
 import jakarta.validation.Valid;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,15 +27,20 @@ public class OrganizationController {
 
     private final UserRepository userRepository;
     private final OrganizationRepository organizationRepository;
+    private final JobListingService jobListingService;
 
-    public OrganizationController(UserRepository userRepository, OrganizationRepository organizationRepository) {
+    public OrganizationController(
+            UserRepository userRepository,
+            OrganizationRepository organizationRepository,
+            JobListingService jobListingService) {
         this.userRepository = userRepository;
         this.organizationRepository = organizationRepository;
+        this.jobListingService = jobListingService;
     }
 
     @AllowUser
     @GetMapping("/organization/{id}")
-    public String settings(@PathVariable Long id, Model model) {
+    public String index(@PathVariable Long id, Model model) {
         if (!this.isInOrganization(id)) {
             return "redirect:/";
         }
@@ -46,8 +55,9 @@ public class OrganizationController {
 
         model.addAttribute("organization", organization);
         model.addAttribute("editOrganizationRequest", editOrganizationRequest);
+        model.addAttribute("createJobListingRequest", new CreateJobListingRequest());
 
-        return "organization/settings";
+        return "organization/index";
     }
 
     @AllowUser
@@ -67,8 +77,9 @@ public class OrganizationController {
 
             model.addAttribute("organization", organization);
             model.addAttribute("editOrganizationRequest", editOrganizationRequest);
+            model.addAttribute("createJobListingRequest", new CreateJobListingRequest());
 
-            return "organization/settings";
+            return "organization/index";
         }
 
         this.organizationRepository
@@ -80,6 +91,41 @@ public class OrganizationController {
                 });
 
         redirectAttributes.addFlashAttribute("info", "Organization updated successfully.");
+
+        return "redirect:/organization/" + id;
+    }
+
+    @AllowUser
+    @PostMapping("/organization/{id}/create-job-listing")
+    public String createJobListing(
+            @PathVariable Long id,
+            @Valid @ModelAttribute("createJobListingRequest") CreateJobListingRequest createJobListingRequest,
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+        if (!this.isInOrganization(id)) {
+            return "redirect:/";
+        }
+
+        if (bindingResult.hasErrors()) {
+            Organization organization = this.organizationRepository.findById(id).orElse(null);
+
+            model.addAttribute("organization", organization);
+            model.addAttribute("editOrganizationRequest", new EditOrganizationRequest());
+            model.addAttribute("createJobListingRequest", createJobListingRequest);
+
+            return "organization/index";
+        }
+
+        ServiceResult createJobListingServiceResult = this.jobListingService.createJobListing(id, createJobListingRequest);
+
+        if (!createJobListingServiceResult.isSuccess()) {
+            BindingResultUtils.addResultErrorsToBindingResult(bindingResult, createJobListingServiceResult);
+
+            return "redirect:/organization/" + id;
+        }
+
+        redirectAttributes.addFlashAttribute("info", "Job listing created successfully.");
 
         return "redirect:/organization/" + id;
     }
