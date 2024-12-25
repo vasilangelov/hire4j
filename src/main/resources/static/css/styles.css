@@ -613,6 +613,24 @@ table.table > tbody > tr > td {
     letter-spacing: -0.25rem;
 }
 
+.pill.is-lg {
+    --app-pill-padding-x: 0.75rem;
+    --app-pill-padding-y: 0.5rem;
+}
+
+.card {
+    --app-card-border-color: var(--app-color-neutral-100);
+    --app-card-border-radius: var(--app-radius-md);
+    --app-card-background: linear-gradient(135deg, var(--app-color-primary-50) 10%, var(--app-color-primary-200) 90%);
+    --app-card-text: var(--app-color-text);
+
+    padding: 1rem 2rem;
+    border-radius: var(--app-card-border-radius);
+
+    color: var(--app-card-text);
+    background: var(--app-card-background);
+}
+
 .hidden {
     display: none;
 }
@@ -655,6 +673,10 @@ table.table > tbody > tr > td {
 
 .items-end {
     align-items: flex-end;
+}
+
+.self-end {
+    align-self: flex-end;
 }
 
 .gap-2 {
@@ -803,6 +825,21 @@ table.table > tbody > tr > td {
 
 .text-center {
     text-align: center;
+}
+
+.text-sm {
+    font-size: var(--app-text-sm);
+    line-height: var(--app-leading-sm);
+}
+
+.text-md {
+    font-size: var(--app-text-md);
+    line-height: var(--app-leading-md);
+}
+
+.text-lg {
+    font-size: var(--app-text-lg);
+    line-height: var(--app-leading-lg);
 }
 
 .list-none {

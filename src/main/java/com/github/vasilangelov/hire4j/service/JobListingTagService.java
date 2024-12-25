@@ -4,9 +4,11 @@ import com.github.vasilangelov.hire4j.model.JobListingTag;
 import com.github.vasilangelov.hire4j.repository.JobListingTagRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class JobListingTagService {
@@ -18,11 +20,11 @@ public class JobListingTagService {
     }
 
     public Set<JobListingTag> upsertTags(String[] tagNames) {
-        Collection<JobListingTag> tags = this.jobListingTagRepository.findAllByNormalizedNameIn(Set.of(tagNames));
+        Collection<JobListingTag> tags = this.jobListingTagRepository.findAllByNormalizedNameIn(Arrays.stream(tagNames).map(String::toLowerCase).collect(Collectors.toSet()));
         Collection<JobListingTag> newTags = new HashSet<>();
 
         for (String tagName : tagNames) {
-            if (tags.stream().noneMatch((tag) -> tag.getNormalizedName().equals(tagName))) {
+            if (tags.stream().noneMatch((tag) -> tag.getNormalizedName().equals(tagName.toLowerCase()))) {
                 newTags.add(new JobListingTag(tagName.toLowerCase(), tagName));
             }
         }

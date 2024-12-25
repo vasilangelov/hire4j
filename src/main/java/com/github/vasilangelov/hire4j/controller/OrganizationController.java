@@ -2,7 +2,8 @@ package com.github.vasilangelov.hire4j.controller;
 
 import com.github.vasilangelov.hire4j.dto.CreateJobListingRequest;
 import com.github.vasilangelov.hire4j.dto.EditOrganizationRequest;
-import com.github.vasilangelov.hire4j.model.Organization;
+import com.github.vasilangelov.hire4j.dto.JobListingDetailsView;
+import com.github.vasilangelov.hire4j.dto.OrganizationDetailsView;
 import com.github.vasilangelov.hire4j.repository.OrganizationRepository;
 import com.github.vasilangelov.hire4j.repository.UserRepository;
 import com.github.vasilangelov.hire4j.service.JobListingService;
@@ -45,7 +46,7 @@ public class OrganizationController {
             return "redirect:/";
         }
 
-        Organization organization = this.organizationRepository.findById(id).orElse(null);
+        OrganizationDetailsView organization = this.organizationRepository.findViewById(id).orElse(null);
 
         if (organization == null) {
             return "redirect:/";
@@ -73,7 +74,7 @@ public class OrganizationController {
         }
 
         if (bindingResult.hasErrors()) {
-            Organization organization = this.organizationRepository.findById(id).orElse(null);
+            OrganizationDetailsView organization = this.organizationRepository.findViewById(id).orElse(null);
 
             model.addAttribute("organization", organization);
             model.addAttribute("editOrganizationRequest", editOrganizationRequest);
@@ -108,7 +109,7 @@ public class OrganizationController {
         }
 
         if (bindingResult.hasErrors()) {
-            Organization organization = this.organizationRepository.findById(id).orElse(null);
+            OrganizationDetailsView organization = this.organizationRepository.findViewById(id).orElse(null);
 
             model.addAttribute("organization", organization);
             model.addAttribute("editOrganizationRequest", new EditOrganizationRequest());
@@ -130,6 +131,91 @@ public class OrganizationController {
         return "redirect:/organization/" + id;
     }
 
+    @AllowUser
+    @PostMapping("/organization/{id}/remove-job-listing")
+    public String removeJobListing(
+            @PathVariable Long id,
+            Long jobListingId,
+            RedirectAttributes redirectAttributes) {
+        if (!this.isInOrganization(id)) {
+            return "redirect:/";
+        }
+
+        this.jobListingService.removeJobListing(jobListingId);
+
+        redirectAttributes.addFlashAttribute("info", "Job listing removed successfully.");
+
+        return "redirect:/organization/" + id;
+    }
+
+    @AllowUser
+    @GetMapping("/organization/{organizationId}/job-listing/{jobListingId}")
+    public String jobListing(
+            @PathVariable Long organizationId,
+            @PathVariable Long jobListingId,
+            Model model) {
+        if (!this.isInOrganization(organizationId)) {
+            return "redirect:/";
+        }
+
+        JobListingDetailsView jobListingDetailsView = this.jobListingService.findJobListingDetailsView(jobListingId);
+
+        if (jobListingDetailsView == null) {
+            return "redirect:/organization/" + organizationId;
+        }
+
+        CreateJobListingRequest editJobListingRequest =
+                new CreateJobListingRequest(
+                        jobListingDetailsView.getTitle(),
+                        jobListingDetailsView.getDescription(),
+                        jobListingDetailsView.getMinYearsOfExperience(),
+                        jobListingDetailsView.getLocation(),
+                        jobListingDetailsView.getTags().toArray(new String[0])
+                );
+
+        model.addAttribute("editJobListingRequest", editJobListingRequest);
+        model.addAttribute("jobListing", jobListingDetailsView);
+
+        return "organization/job-listing";
+    }
+
+    @AllowUser
+    @PostMapping("/organization/{organizationId}/job-listing/{jobListingId}/edit")
+    public String editJobListing(
+            @PathVariable Long organizationId,
+            @PathVariable Long jobListingId,
+            @Valid @ModelAttribute("editJobListingRequest") CreateJobListingRequest editJobListingRequest,
+            BindingResult bindingResult,
+            Model model,
+            RedirectAttributes redirectAttributes
+    ) {
+        if (!this.isInOrganization(organizationId)) {
+            return "redirect:/";
+        }
+
+        if (bindingResult.hasErrors()) {
+            JobListingDetailsView jobListingDetailsView = this.jobListingService.findJobListingDetailsView(jobListingId);
+
+            model.addAttribute("jobListing", jobListingDetailsView);
+
+            return "organization/job-listing";
+        }
+
+        ServiceResult editJobListingServiceResult = this.jobListingService.editJobListing(jobListingId, editJobListingRequest);
+
+        if (!editJobListingServiceResult.isSuccess()) {
+            BindingResultUtils.addResultErrorsToBindingResult(bindingResult, editJobListingServiceResult);
+
+            JobListingDetailsView jobListingDetailsView = this.jobListingService.findJobListingDetailsView(jobListingId);
+
+            model.addAttribute("jobListing", jobListingDetailsView);
+
+            return "organization/job-listing";
+        }
+
+        return "redirect:/organization/" + organizationId + "/job-listing/" + jobListingId;
+    }
+
     private boolean isInOrganization(Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -139,10 +225,10 @@ public class OrganizationController {
 
         String email = authentication.getName();
 
-       return this.userRepository
-               .findByEmail(email)
-               .map(user -> user.getOrganization().getId().equals(id))
-               .orElse(false);
+        return this.userRepository
+                .findByEmail(email)
+                .map(user -> user.getOrganization().getId().equals(id))
+                .orElse(false);
     }
 
 }
