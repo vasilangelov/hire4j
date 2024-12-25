@@ -37,7 +37,7 @@
               th:with="route=@{/organization/{id}(id=${organization.getId()})}"
               th:href="${route}"
               th:text="${organization.getName()}"
-              th:classappend="${@thymeleafService.getRequestURI() == route} ? 'is-active'"
+              th:classappend="${@thymeleafService.getRequestURI().startsWith(route)} ? 'is-active'"
             ></a>
           </th:block>
 

@@ -1,6 +1,5 @@
 package com.github.vasilangelov.hire4j.dto;
 
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -24,6 +23,14 @@ public class CreateJobListingRequest {
 
     public CreateJobListingRequest() {
         this.tags = new String[0];
+    }
+
+    public CreateJobListingRequest(String title, String description, Byte minYearsOfExperience, String location, String[] tags) {
+        this.title = title;
+        this.description = description;
+        this.minYearsOfExperience = minYearsOfExperience;
+        this.location = location;
+        this.tags = tags;
     }
 
     public String getTitle() {

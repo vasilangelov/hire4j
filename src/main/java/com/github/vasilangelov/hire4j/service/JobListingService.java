@@ -1,6 +1,7 @@
 package com.github.vasilangelov.hire4j.service;
 
 import com.github.vasilangelov.hire4j.dto.CreateJobListingRequest;
+import com.github.vasilangelov.hire4j.dto.JobListingDetailsView;
 import com.github.vasilangelov.hire4j.model.JobListing;
 import com.github.vasilangelov.hire4j.model.JobListingTag;
 import com.github.vasilangelov.hire4j.model.Organization;
@@ -46,6 +47,34 @@ public class JobListingService {
         ));
 
         return ServiceResult.success();
+    }
+
+    public ServiceResult editJobListing(Long id, CreateJobListingRequest request) {
+        JobListing jobListing = this.jobListingRepository.findById(id).orElse(null);
+
+        if (jobListing == null) {
+            return ServiceResult.failure("Job listing not found");
+        }
+
+        Set<JobListingTag> tags = this.jobListingTagService.upsertTags(request.getTags());
+
+        jobListing.setTitle(request.getTitle());
+        jobListing.setDescription(request.getDescription());
+        jobListing.setMinYearsOfExperience(request.getMinYearsOfExperience());
+        jobListing.setLocation(request.getLocation());
+        jobListing.setTags(tags);
+
+        this.jobListingRepository.save(jobListing);
+
+        return ServiceResult.success();
+    }
+
+    public void removeJobListing(Long id) {
+        this.jobListingRepository.deleteById(id);
+    }
+
+    public JobListingDetailsView findJobListingDetailsView(Long id) {
+        return this.jobListingRepository.findDetailsViewById(id).orElse(null);
     }
 
 }
