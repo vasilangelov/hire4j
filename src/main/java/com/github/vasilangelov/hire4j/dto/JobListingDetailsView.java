@@ -11,6 +11,9 @@ public interface JobListingDetailsView {
     @Value("#{target.organization.id}")
     Long getOrganizationId();
 
+    @Value("#{target.organization.name}")
+    String getOrganizationName();
+
     String getTitle();
 
     String getDescription();

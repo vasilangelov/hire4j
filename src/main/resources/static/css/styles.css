@@ -40,6 +40,7 @@
 
     --app-font-sans: "Inter", "Helvetica", sans-serif;
 
+    --app-radius-2xs: 0.125rem;
     --app-radius-xs: 0.25rem;
     --app-radius-sm: 0.5rem;
     --app-radius-md: 0.75rem;
@@ -99,6 +100,15 @@ h3 {
 
 a {
     text-decoration: none;
+}
+
+fieldset {
+    padding: 0;
+    border: none;
+}
+
+legend {
+    display: block;
 }
 
 body {
@@ -315,8 +325,13 @@ body {
     align-items: center;
     justify-content: center;
 
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
+}
+
+.button.is-1\/1.is-lg {
+    width: 2.75rem;
+    height: 2.75rem;
 }
 
 .button.is-outline {
@@ -347,6 +362,18 @@ body {
     width: 100%;
 }
 
+.input-container.is-selectable {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.input-container.is-selectable > label {
+    flex-grow: 1;
+
+    cursor: pointer;
+}
+
 .label {
     font-weight: var(--app-font-semibold);
 }
@@ -359,11 +386,12 @@ body {
     --app-input-padding-x: 1rem;
     --app-input-padding-y: 0.75rem;
     --app-input-border-width: 1px;
+    --app-input-border-radius: var(--app-radius-md);
     --app-input-box-shadow-spread: 0;
 
     padding: var(--app-input-padding-y) var(--app-input-padding-x);
     border: var(--app-input-border-width) solid var(--app-input-border-color);
-    border-radius: var(--app-radius-md);
+    border-radius: var(--app-input-border-radius);
     box-shadow: 0 0 0 var(--app-input-box-shadow-spread) var(--app-input-box-shadow-color);
     outline-color: var(--app-input-outline-color);
     outline-offset: 0.375rem;
@@ -381,6 +409,67 @@ body {
 
     color: var(--app-color-text);
     font-weight: var(--app-font-normal);
+}
+
+.input:is([type="checkbox"], [type="radio"]) {
+    --app-input-padding-x: 0.5rem;
+    --app-input-padding-y: 0.5rem;
+
+    flex-shrink: 0;
+
+    appearance: none;
+
+    position: relative;
+
+    width: 1rem;
+    height: 1rem;
+
+    cursor: pointer;
+}
+
+.input[type="checkbox"] {
+    --app-input-border-radius: var(--app-radius-xs);
+}
+
+.input[type="radio"] {
+    --app-input-border-radius: var(--app-radius-full);
+}
+
+.input:is([type="checkbox"], [type="radio"])::before {
+    --app-selectable-input-translate: translate(-50%, -50%);
+    --app-selectable-input-scale: scale(0);
+
+    content: "";
+
+    display: block;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: var(--app-selectable-input-translate) var(--app-selectable-input-scale);
+
+    border-radius: var(--app-radius-2xs);
+
+    width: 60%;
+    height: 60%;
+
+    background-color: var(--app-color-primary-500);
+
+    transition: transform 100ms ease-in-out;
+}
+
+.input[type="radio"]::before {
+    border-radius: var(--app-input-border-radius);
+}
+
+.input:is([type="checkbox"], [type="radio"]):checked::before {
+    --app-selectable-input-scale: scale(1);
+}
+
+select.input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 textarea.input {
@@ -687,6 +776,10 @@ table.table > tbody > tr > td {
     gap: 1rem;
 }
 
+.gap-8 {
+    gap: 2rem;
+}
+
 .gap-10 {
     gap: 2.5rem;
 }
@@ -737,6 +830,14 @@ table.table > tbody > tr > td {
 
 .mt-auto {
     margin-top: auto;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
+}
+
+.mt-4 {
+    margin-top: 1rem;
 }
 
 .mt-12 {

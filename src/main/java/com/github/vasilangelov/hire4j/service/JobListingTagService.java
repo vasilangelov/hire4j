@@ -4,10 +4,7 @@ import com.github.vasilangelov.hire4j.model.JobListingTag;
 import com.github.vasilangelov.hire4j.repository.JobListingTagRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service

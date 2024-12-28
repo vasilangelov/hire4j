@@ -2,6 +2,7 @@ package com.github.vasilangelov.hire4j.model;
 
 import jakarta.persistence.*;
 
+import java.time.ZonedDateTime;
 import java.util.Set;
 
 @Entity
@@ -24,6 +25,9 @@ public class JobListing {
     @Column(nullable = true)
     private String location;
 
+    @Column(nullable = false, updatable = false)
+    private ZonedDateTime createdAt;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "organization_id", nullable = false)
     private Organization organization;
@@ -38,12 +42,15 @@ public class JobListing {
             String description,
             Byte minYearsOfExperience,
             String location,
+            ZonedDateTime createdAt,
             Organization organization,
-            Set<JobListingTag> tags) {
+            Set<JobListingTag> tags
+    ) {
         this.title = title;
         this.description = description;
         this.minYearsOfExperience = minYearsOfExperience;
         this.location = location;
+        this.createdAt = createdAt;
         this.organization = organization;
         this.tags = tags;
     }
@@ -86,6 +93,14 @@ public class JobListing {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public ZonedDateTime getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public void setCreatedAt(ZonedDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Organization getOrganization() {

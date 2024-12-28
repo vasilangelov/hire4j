@@ -1,15 +1,18 @@
 package com.github.vasilangelov.hire4j.service;
 
-import com.github.vasilangelov.hire4j.dto.CreateJobListingRequest;
-import com.github.vasilangelov.hire4j.dto.JobListingDetailsView;
+import com.github.vasilangelov.hire4j.dto.*;
 import com.github.vasilangelov.hire4j.model.JobListing;
 import com.github.vasilangelov.hire4j.model.JobListingTag;
 import com.github.vasilangelov.hire4j.model.Organization;
 import com.github.vasilangelov.hire4j.repository.JobListingRepository;
 import com.github.vasilangelov.hire4j.repository.OrganizationRepository;
 import com.github.vasilangelov.hire4j.util.service.ServiceResult;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
+import java.util.Collection;
 import java.util.Set;
 
 @Service
@@ -42,6 +45,7 @@ public class JobListingService {
                 request.getDescription(),
                 request.getMinYearsOfExperience(),
                 request.getLocation(),
+                ZonedDateTime.now(),
                 organization,
                 tags
         ));
@@ -75,6 +79,37 @@ public class JobListingService {
 
     public JobListingDetailsView findJobListingDetailsView(Long id) {
         return this.jobListingRepository.findDetailsViewById(id).orElse(null);
+    }
+
+    public JobListingFiltersView getJobListingFilters(JobListingFilters filters) {
+        Collection<TagWithCountView> tags = this.jobListingRepository
+                .getJobListingTagsBy(
+                        filters.getSearch(),
+                        filters.getLocation(),
+                        filters.getMinYearsOfExperience()
+                );
+
+        Collection<LocationWithCountView> locations = this.jobListingRepository
+                .getJobListingLocationsBy(
+                        filters.getSearch(),
+                        filters.getTags(),
+                        filters.getMinYearsOfExperience()
+                );
+
+        return new JobListingFiltersView(tags, locations);
+    }
+
+    public Page<JobListingDetailsView> searchJobListings(JobListingFilters filters) {
+        int page = Math.max(0, filters.getPage() - 1);
+
+        return this.jobListingRepository
+                .findPageBy(
+                        filters.getSearch(),
+                        filters.getTags(),
+                        filters.getLocation(),
+                        filters.getMinYearsOfExperience(),
+                        PageRequest.of(page, 10)
+                );
     }
 
 }
