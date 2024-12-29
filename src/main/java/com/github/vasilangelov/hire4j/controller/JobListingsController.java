@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -36,6 +37,19 @@ public class JobListingsController {
         model.addAttribute("page", page);
 
         return "job-listings/index";
+    }
+
+    @GetMapping("/job-listings/{id}")
+    public String details(@PathVariable Long id, Model model) {
+        JobListingDetailsView jobListing = this.jobListingService.findJobListingDetailsView(id);
+
+        if (jobListing == null) {
+            return "redirect:/job-listings";
+        }
+
+        model.addAttribute("jobListing", jobListing);
+
+        return "job-listings/details";
     }
 
 }

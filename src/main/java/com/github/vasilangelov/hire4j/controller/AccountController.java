@@ -4,6 +4,7 @@ import com.github.vasilangelov.hire4j.dto.CreateUserRequest;
 import com.github.vasilangelov.hire4j.model.Role;
 import com.github.vasilangelov.hire4j.service.UserService;
 import com.github.vasilangelov.hire4j.util.BindingResultUtils;
+import com.github.vasilangelov.hire4j.util.controller.AllowUser;
 import com.github.vasilangelov.hire4j.util.service.ServiceResult;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -49,6 +50,16 @@ public class AccountController {
         }
 
         return "redirect:/account/sign-in";
+    }
+
+    @AllowUser
+    @PostMapping("/account/sign-in/success")
+    public String handleSignInSuccess(String redirectURL) {
+        if (redirectURL != null && !redirectURL.isBlank()) {
+            return "redirect:" + redirectURL;
+        }
+
+        return "redirect:/";
     }
 
 }

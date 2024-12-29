@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+  <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+  <head th:replace="~{layouts/root :: head (title=~{::title/text()})}">
+    <title>Job Listing</title>
+  </head>
+  <body th:replace="~{layouts/root :: body(content=~{::#content-root})}">
+    <div
+      id="content-root"
+      class="flex flex-col gap-4 container"
+      th:with="currentURL=@{/job-listings/{id}(id=${jobListing.getId()})}"
+    >
+      <div class="flex justify-between items-start">
+        <div>
+          <div class="flex gap-4">
+            <h1 th:text="${jobListing.getTitle()}"></h1>
+            <span class="pill is-lg self-end">
+              <i class="bi bi-geo-alt-fill"></i>
+              <th:block th:text="${!jobListing.getLocation().isBlank()} ? ${jobListing.getLocation()} : 'Remote'"></th:block>
+            </span>
+          </div>
+        </div>
+
+        <div class="flex gap-4 items-start">
+          <button
+            class="button has-icon"
+            data-click-action="open-drawer"
+            data-target-selector="#edit-job-listing-drawer"
+            sec:authorize="isAuthenticated()"
+          >
+            <i class="bi bi-file-earmark-check-fill"></i> Apply
+          </button>
+          <a
+            class="button has-icon is-primary-50"
+            th:href="@{/account/sign-in(redirectURL=${currentURL})}"
+            sec:authorize="!isAuthenticated()"
+          >
+            <i class="bi bi-file-earmark-check-fill"></i> Sign in to apply
+          </a>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-2">
+          <h2>Tags</h2>
+          <div class="flex flex-wrap gap-2" th:if="${jobListing.getTags().size() > 0}">
+            <span class="pill" th:each="tag : ${jobListing.getSortedTags()}">
+              <th:block th:text="${tag}"></th:block>
+            </span>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <h2>Description</h2>
+          <p th:text="${jobListing.getDescription()}"></p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

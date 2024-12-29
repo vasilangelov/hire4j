@@ -339,6 +339,11 @@ body {
     --app-button-text-color: var(--app-color-text);
 }
 
+.button.is-sm {
+    --app-button-padding-x: 1rem;
+    --app-button-padding-y: 0.5rem;
+}
+
 .button.has-icon {
     display: inline-flex;
     align-items: center;
@@ -705,6 +710,11 @@ table.table > tbody > tr > td {
 .pill.is-lg {
     --app-pill-padding-x: 0.75rem;
     --app-pill-padding-y: 0.5rem;
+}
+
+.pill.is-primary-50 {
+    --app-pill-background-color: var(--app-color-primary-50);
+    --app-pill-text-color: var(--app-color-primary-50-contrast);
 }
 
 .card {

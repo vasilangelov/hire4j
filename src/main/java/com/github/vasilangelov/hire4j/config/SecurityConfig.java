@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                 .formLogin(configurator -> configurator
                         .loginPage("/account/sign-in")
-                        .defaultSuccessUrl("/", true)
+                        .successForwardUrl("/account/sign-in/success")
                         .permitAll())
                 .logout(configurator -> configurator
                         .logoutUrl("/account/sign-out")
