@@ -4,13 +4,18 @@ import com.github.vasilangelov.hire4j.dto.CreateJobListingRequest;
 import com.github.vasilangelov.hire4j.dto.EditOrganizationRequest;
 import com.github.vasilangelov.hire4j.dto.JobListingDetailsView;
 import com.github.vasilangelov.hire4j.dto.OrganizationDetailsView;
+import com.github.vasilangelov.hire4j.model.JobApplication;
+import com.github.vasilangelov.hire4j.model.Organization;
 import com.github.vasilangelov.hire4j.repository.OrganizationRepository;
 import com.github.vasilangelov.hire4j.repository.UserRepository;
+import com.github.vasilangelov.hire4j.service.JobApplicationService;
 import com.github.vasilangelov.hire4j.service.JobListingService;
 import com.github.vasilangelov.hire4j.util.BindingResultUtils;
 import com.github.vasilangelov.hire4j.util.controller.AllowUser;
 import com.github.vasilangelov.hire4j.util.service.ServiceResult;
 import jakarta.validation.Valid;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,14 +34,18 @@ public class OrganizationController {
     private final UserRepository userRepository;
     private final OrganizationRepository organizationRepository;
     private final JobListingService jobListingService;
+    private final JobApplicationService jobApplicationService;
 
     public OrganizationController(
             UserRepository userRepository,
             OrganizationRepository organizationRepository,
-            JobListingService jobListingService) {
+            JobListingService jobListingService,
+            JobApplicationService jobApplicationService
+    ) {
         this.userRepository = userRepository;
         this.organizationRepository = organizationRepository;
         this.jobListingService = jobListingService;
+        this.jobApplicationService = jobApplicationService;
     }
 
     @AllowUser
@@ -211,6 +220,91 @@ public class OrganizationController {
             model.addAttribute("jobListing", jobListingDetailsView);
 
             return "organization/job-listing";
+        }
+
+        redirectAttributes.addFlashAttribute("info", "Job listing updated successfully.");
+
+        return "redirect:/organization/" + organizationId + "/job-listing/" + jobListingId;
+    }
+
+    @AllowUser
+    @GetMapping("/organization/{organizationId}/application/{applicationId}/cv")
+    public ResponseEntity<Resource> downloadCv(
+            @PathVariable Long organizationId,
+            @PathVariable Long applicationId
+    ) {
+        if (!this.isInOrganization(organizationId)) {
+            return ResponseEntity
+                    .notFound()
+                    .build();
+        }
+
+        Organization organization = this.organizationRepository.findById(organizationId).orElse(null);
+        JobApplication jobApplication = this.jobApplicationService.getJobApplicationById(applicationId).orElse(null);
+
+        if (organization == null || jobApplication == null || !jobApplication.getJobListing().getOrganization().getId().equals(organizationId)) {
+            return ResponseEntity
+                    .notFound()
+                    .build();
+        }
+
+        Resource resource = this.jobApplicationService
+                .getCVAsResource(applicationId)
+                .orElse(null);
+
+        if (resource == null) {
+            return ResponseEntity
+                    .notFound()
+                    .build();
+        }
+
+        return ResponseEntity
+                .ok()
+                .header("Content-Disposition", "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+    @AllowUser
+    @GetMapping("/organization/{organizationId}/job-listing/{jobListingId}/application/{applicationId}/accept")
+    public String acceptApplication(
+            @PathVariable Long organizationId,
+            @PathVariable Long jobListingId,
+            @PathVariable Long applicationId,
+            RedirectAttributes redirectAttributes
+    ) {
+        if (!this.isInOrganization(organizationId)) {
+            return "redirect:/";
+        }
+
+        ServiceResult acceptApplicationServiceResult = this.jobApplicationService.acceptApplication(applicationId);
+
+        if (!acceptApplicationServiceResult.isSuccess()) {
+            redirectAttributes.addFlashAttribute("error", acceptApplicationServiceResult);
+        } else {
+            redirectAttributes.addFlashAttribute("info", "Application accepted successfully.");
+        }
+
+        return "redirect:/organization/" + organizationId + "/job-listing/" + jobListingId;
+    }
+
+    @AllowUser
+    @GetMapping("/organization/{organizationId}/job-listing/{jobListingId}/application/{applicationId}/reject")
+    public String rejectApplication(
+            @PathVariable Long organizationId,
+            @PathVariable Long jobListingId,
+            @PathVariable Long applicationId,
+            RedirectAttributes redirectAttributes
+    ) {
+        if (!this.isInOrganization(organizationId)) {
+            return "redirect:/";
+        }
+
+        ServiceResult rejectApplicationServiceResult = this.jobApplicationService.rejectApplication(applicationId);
+
+        if (!rejectApplicationServiceResult.isSuccess()) {
+            redirectAttributes.addFlashAttribute("error", rejectApplicationServiceResult);
+        } else {
+            redirectAttributes.addFlashAttribute("info", "Application rejected successfully.");
         }
 
         return "redirect:/organization/" + organizationId + "/job-listing/" + jobListingId;

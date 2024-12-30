@@ -23,6 +23,9 @@
     --app-color-danger: #ff5555;
     --app-color-danger-contrast: #fff;
 
+    --app-color-success: #00d68f;
+    --app-color-success-contrast: #fff;
+
     --app-color-neutral-50: #f6f6f6;
     --app-color-neutral-100: #e7e7e7;
     --app-color-neutral-200: #d1d1d1;
@@ -317,6 +320,12 @@ body {
     --app-button-text-color: var(--app-color-danger-contrast);
 }
 
+.button.is-success {
+    --app-button-border-color: var(--app-color-success);
+    --app-button-fill-color: var(--app-color-success);
+    --app-button-text-color: var(--app-color-success-contrast);
+}
+
 .button.is-1\/1 {
     --app-button-padding-x: 0;
     --app-button-padding-y: 0;
@@ -337,6 +346,11 @@ body {
 .button.is-outline {
     --app-button-fill-color: var(--app-color-background);
     --app-button-text-color: var(--app-color-text);
+}
+
+.button.is-sm {
+    --app-button-padding-x: 1rem;
+    --app-button-padding-y: 0.5rem;
 }
 
 .button.has-icon {
@@ -705,6 +719,11 @@ table.table > tbody > tr > td {
 .pill.is-lg {
     --app-pill-padding-x: 0.75rem;
     --app-pill-padding-y: 0.5rem;
+}
+
+.pill.is-primary-50 {
+    --app-pill-background-color: var(--app-color-primary-50);
+    --app-pill-text-color: var(--app-color-primary-50-contrast);
 }
 
 .card {

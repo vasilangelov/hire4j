@@ -11,7 +11,7 @@
 
           <p class="notification is-danger" th:if="${param.logout}">You have been signed out.</p>
 
-          <form class="flex flex-col gap-4" method="post" th:action="@{/account/sign-in}">
+          <form class="flex flex-col gap-4" method="post" th:action="@{/account/sign-in(redirectURL=${param.redirectURL})}">
             <div class="input-container">
               <label class="label" for="email">Email</label>
               <input id="email" name="username" class="input" type="email" placeholder="johndoe@example.com" />

@@ -28,6 +28,15 @@
         <div class="navigation-group">
           <a class="navigation-item" th:with="route=@{/}" th:href="${route}" th:classappend="${@thymeleafService.getRequestURI() == route} ? 'is-active'">Home</a>
           <a class="navigation-item" th:with="route=@{/job-listings}" th:href="${route}" th:classappend="${@thymeleafService.getRequestURI() == route} ? 'is-active'">Job Search</a>
+          <a
+            class="navigation-item"
+            sec:authorize="isAuthenticated()"
+            th:with="route=@{/account/applications}"
+            th:href="${route}"
+            th:classappend="${@thymeleafService.getRequestURI() == route} ? 'is-active'"
+          >
+            My Applications
+          </a>
 
           <th:block
             th:if="${@thymeleafService.getUserOrganization().isPresent()}"

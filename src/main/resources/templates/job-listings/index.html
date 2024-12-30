@@ -92,7 +92,7 @@
                 by
                 <th:block th:text="${jobListing.getOrganizationName()}"></th:block>
               </div>
-              <div class="pill is-lg">
+              <div class="pill is-primary-50 is-lg">
                 <i class="bi bi-geo-alt-fill"></i>
 
                 <th:block th:text="${!jobListing.getLocation().isBlank()} ? ${jobListing.getLocation()} : 'Remote'"></th:block>
@@ -101,10 +101,20 @@
 
             <div class="flex-1" th:text="${#strings.abbreviate(jobListing.getDescription(), 250)}"></div>
 
-            <div class="flex flex-wrap gap-2">
+            <div class="flex items-end gap-4">
+              <div class="flex-1 flex flex-wrap gap-2">
                 <span class="pill" th:each="tag : ${jobListing.getSortedTags()}">
                   <th:block th:text="${tag}"></th:block>
                 </span>
+              </div>
+
+              <a
+                class="button has-icon is-sm"
+                th:href="@{/job-listings/{id}(id=${jobListing.getId()})}"
+              >
+                Read more
+                <i class="bi bi-arrow-right"></i>
+              </a>
             </div>
           </div>
         </main>

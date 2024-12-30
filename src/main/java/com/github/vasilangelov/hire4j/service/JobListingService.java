@@ -1,9 +1,7 @@
 package com.github.vasilangelov.hire4j.service;
 
 import com.github.vasilangelov.hire4j.dto.*;
-import com.github.vasilangelov.hire4j.model.JobListing;
-import com.github.vasilangelov.hire4j.model.JobListingTag;
-import com.github.vasilangelov.hire4j.model.Organization;
+import com.github.vasilangelov.hire4j.model.*;
 import com.github.vasilangelov.hire4j.repository.JobListingRepository;
 import com.github.vasilangelov.hire4j.repository.OrganizationRepository;
 import com.github.vasilangelov.hire4j.util.service.ServiceResult;
@@ -25,7 +23,8 @@ public class JobListingService {
     public JobListingService(
             JobListingRepository jobListingRepository,
             OrganizationRepository organizationRepository,
-            JobListingTagService jobListingTagService) {
+            JobListingTagService jobListingTagService
+    ) {
         this.jobListingRepository = jobListingRepository;
         this.organizationRepository = organizationRepository;
         this.jobListingTagService = jobListingTagService;

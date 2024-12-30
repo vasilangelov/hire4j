@@ -35,6 +35,9 @@ public class JobListing {
     @ManyToMany
     private Set<JobListingTag> tags;
 
+    @OneToMany(mappedBy = "jobListing", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<JobApplication> applications;
+
     public JobListing() { }
 
     public JobListing(
@@ -53,6 +56,7 @@ public class JobListing {
         this.createdAt = createdAt;
         this.organization = organization;
         this.tags = tags;
+        this.applications = Set.of();
     }
 
     public long getId() {
@@ -117,6 +121,14 @@ public class JobListing {
 
     public void setTags(Set<JobListingTag> tags) {
         this.tags = tags;
+    }
+
+    public Set<JobApplication> getApplications() {
+        return this.applications;
+    }
+
+    public void setApplications(Set<JobApplication> applications) {
+        this.applications = applications;
     }
 
 }

@@ -28,14 +28,16 @@
           <thead>
             <tr>
               <th style="width: 25%">Title</th>
-              <th style="width: 50%;">Description</th>
-              <th>Actions</th>
+              <th style="width: 35%;">Description</th>
+              <th style="width: 15%">New Applications</th>
+              <th style="width: 25%">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr th:each="job : ${organization.getJobListings()}">
               <td th:text="${job.getTitle()}"></td>
               <td th:text="${#strings.abbreviate(job.getDescription(), 100)}"></td>
+              <td th:text="${job.getNewApplicationsCount()}"></td>
               <td>
                 <div class="flex gap-2 justify-end items-center">
                   <a
