@@ -783,6 +783,10 @@ table.table > tbody > tr > td {
     align-items: flex-end;
 }
 
+.self-stretch {
+    align-self: stretch;
+}
+
 .self-end {
     align-self: flex-end;
 }
@@ -919,6 +923,10 @@ table.table > tbody > tr > td {
     min-width: 50%;
 }
 
+.min-h-0 {
+    min-height: 0;
+}
+
 .max-w-1\/2 {
     max-width: 50%;
 }
@@ -929,6 +937,10 @@ table.table > tbody > tr > td {
 
 .max-w-150 {
     max-width: 37.5rem;
+}
+
+.max-h-150 {
+    max-height: 37.5rem;
 }
 
 .overflow-auto {
@@ -960,6 +972,10 @@ table.table > tbody > tr > td {
 .text-lg {
     font-size: var(--app-text-lg);
     line-height: var(--app-leading-lg);
+}
+
+.font-bold {
+    font-weight: var(--app-font-bold);
 }
 
 .list-none {

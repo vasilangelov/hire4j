@@ -68,4 +68,10 @@ public interface JobListingRepository extends CrudRepository<JobListing, Long> {
             @Param("years") Byte minYearsOfExperience
     );
 
+    @Query("SELECT job " +
+            "FROM JobListing job " +
+            "ORDER BY job.createdAt DESC " +
+            "LIMIT :count")
+    Collection<JobListingDetailsView> findLatestJobListings(@Param("count") int count);
+
 }

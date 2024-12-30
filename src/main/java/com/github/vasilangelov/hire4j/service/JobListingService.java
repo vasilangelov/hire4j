@@ -111,4 +111,8 @@ public class JobListingService {
                 );
     }
 
+    public Collection<JobListingDetailsView> getLatestJobListings(int count) {
+        return this.jobListingRepository.findLatestJobListings(count);
+    }
+
 }
