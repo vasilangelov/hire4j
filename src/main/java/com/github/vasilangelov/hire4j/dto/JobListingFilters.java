@@ -1,6 +1,7 @@
 package com.github.vasilangelov.hire4j.dto;
 
 import java.util.Collection;
+import java.util.Objects;
 
 public class JobListingFilters {
 
@@ -27,7 +28,19 @@ public class JobListingFilters {
     }
 
     public void setTags(Collection<String> tags) {
-        this.tags = tags;
+        if (tags == null) {
+            this.tags = null;
+            return;
+        }
+
+        var sanitized = tags.stream()
+            .filter(Objects::nonNull)
+            .map(String::trim)
+            .filter(tag -> !tag.isBlank())
+            .distinct()
+            .toList();
+
+        this.tags = sanitized.isEmpty() ? null : sanitized;
     }
 
     public Integer getPage() {

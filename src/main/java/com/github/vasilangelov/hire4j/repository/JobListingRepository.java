@@ -35,15 +35,15 @@ public interface JobListingRepository extends CrudRepository<JobListing, Long> {
     );
 
     @Query(" SELECT " +
-                "job.location AS location, " +
-                "COUNT(job.location) AS count " +
-            "FROM JobListing job " +
-            "WHERE " +
-                "LOWER(job.title) LIKE CONCAT('%', LOWER(:search), '%') AND " +
-                "(:tags IS NULL OR EXISTS (SELECT 1 FROM job.tags jt WHERE jt.normalizedName IN :tags)) AND " +
-                "(:years IS NULL OR :years = 0 OR job.minYearsOfExperience >= :years) " +
-            "GROUP BY job " +
-            "ORDER BY count DESC, job.location ASC")
+            "COALESCE(job.location, '') AS location, " +
+            "COUNT(job.id) AS count " +
+        "FROM JobListing job " +
+        "WHERE " +
+            "LOWER(job.title) LIKE CONCAT('%', LOWER(:search), '%') AND " +
+            "(:tags IS NULL OR EXISTS (SELECT 1 FROM job.tags jt WHERE jt.normalizedName IN :tags)) AND " +
+            "(:years IS NULL OR :years = 0 OR job.minYearsOfExperience >= :years) " +
+        "GROUP BY COALESCE(job.location, '') " +
+        "ORDER BY COUNT(job.id) DESC, COALESCE(job.location, '') ASC")
     List<LocationWithCountView> getJobListingLocationsBy(
             @Param("search") String search,
             @Param("tags") Collection<String> tags,
