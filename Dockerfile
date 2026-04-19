@@ -2,7 +2,7 @@ FROM maven:3.9-amazoncorretto-21-alpine AS builder
 
 WORKDIR /build
 
-COPY .mvn/wrapper /.mvn/wrapper
+COPY ./.mvn/wrapper ./.mvn/wrapper
 COPY ./src ./src
 COPY ./pom.xml ./
 
