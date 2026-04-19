@@ -3,28 +3,28 @@
 
     --app-color-background: #fff;
 
-    --app-color-primary-50: #ecf0ff;
-    --app-color-primary-50-contrast: #6b6b6b;
-    --app-color-primary-100: #dde2ff;
-    --app-color-primary-200: #c2caff;
-    --app-color-primary-300: #9ca6ff;
-    --app-color-primary-400: #7577ff;
-    --app-color-primary-500: #6c63ff;
-    --app-color-primary-500-o-15: #6c63ff26;
-    --app-color-primary-500-o-25: #6c63ff3f;
-    --app-color-primary-500-o-75: #6c63ff3f;
+    --app-color-primary-50: #ececff;
+    --app-color-primary-50-contrast: #4f4f4f;
+    --app-color-primary-100: #d7d6ff;
+    --app-color-primary-200: #b2b1ff;
+    --app-color-primary-300: #8b88ff;
+    --app-color-primary-400: #6560ff;
+    --app-color-primary-500: #3429ff;
+    --app-color-primary-500-o-15: #3429ff26;
+    --app-color-primary-500-o-25: #3429ff3f;
+    --app-color-primary-500-o-75: #3429ffbf;
     --app-color-primary-500-contrast: #fff;
-    --app-color-primary-600: #5036f5;
-    --app-color-primary-700: #452ad8;
-    --app-color-primary-800: #3825ae;
-    --app-color-primary-900: #312689;
-    --app-color-primary-950: #1f1650;
+    --app-color-primary-600: #1a00eb;
+    --app-color-primary-700: #1200b6;
+    --app-color-primary-800: #0a008a;
+    --app-color-primary-900: #04005b;
+    --app-color-primary-950: #020045;
 
     --app-color-danger: #ff5555;
-    --app-color-danger-contrast: #fff;
+    --app-color-danger-contrast: #2b2b2b;
 
     --app-color-success: #00d68f;
-    --app-color-success-contrast: #fff;
+    --app-color-success-contrast: #2b2b2b;
 
     --app-color-neutral-50: #f6f6f6;
     --app-color-neutral-100: #e7e7e7;
@@ -274,7 +274,7 @@ body {
 }
 
 .subtitle {
-    color: var(--app-color-neutral-400);
+    color: var(--app-color-neutral-500);
 }
 
 .button {
@@ -873,6 +873,10 @@ table.table > tbody > tr > td {
 
 .mb-8 {
     margin-bottom: 2rem;
+}
+
+.mb-12 {
+    margin-bottom: 3rem;
 }
 
 .mb-20 {

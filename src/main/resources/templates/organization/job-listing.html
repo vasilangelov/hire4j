@@ -4,7 +4,7 @@
     <title>Job Listing</title>
   </head>
   <body th:replace="~{layouts/root :: body(content=~{::#content-root},scripts=~{::script})}">
-    <div id="content-root" class="flex flex-col gap-4 container">
+    <main id="content-root" class="flex flex-col gap-4 container">
       <div class="flex justify-between items-start">
         <div>
           <div class="flex gap-4">
@@ -171,8 +171,7 @@
           </button>
         </div>
       </div>
-
-    </div>
+    </main>
 
     <script>
       const applicationDetailsDescription = document.getElementById('view-application-details-description');

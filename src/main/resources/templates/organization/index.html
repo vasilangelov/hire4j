@@ -4,7 +4,7 @@
     <title>Organization</title>
   </head>
   <body th:replace="~{layouts/root :: body(content=~{::#page-root},scripts=~{::script})}">
-    <div id="page-root" class="flex flex-col gap-4 container">
+    <main id="page-root" class="flex flex-col gap-4 container">
       <div class="flex justify-between items-start">
         <div>
           <h1 th:text="${organization.getName()}"></h1>
@@ -167,7 +167,7 @@
           </form>
         </div>
       </div>
-    </div>
+    </main>
 
     <script>
       const removeJobIdInput = document.getElementById("remove-job-id-input");

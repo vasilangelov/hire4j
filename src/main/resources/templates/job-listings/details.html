@@ -4,7 +4,7 @@
     <title>Job Listing</title>
   </head>
   <body th:replace="~{layouts/root :: body(content=~{::#content-root})}">
-    <div
+    <main
       id="content-root"
       class="flex flex-col gap-4 container"
       th:with="currentURL=@{/job-listings/{id}(id=${jobListing.getId()})}"
@@ -14,7 +14,7 @@
           <div class="flex gap-4">
             <h1 th:text="${jobListing.getTitle()}"></h1>
             <span class="pill is-lg self-end">
-              <i class="bi bi-geo-alt-fill"></i>
+              <i class="bi bi-geo-alt-fill" aria-hidden="true"></i>
               <th:block th:text="${!jobListing.getLocation().isBlank()} ? ${jobListing.getLocation()} : 'Remote'"></th:block>
             </span>
           </div>
@@ -28,14 +28,14 @@
               data-target-selector="#apply-drawer"
               sec:authorize="isAuthenticated()"
             >
-              <i class="bi bi-file-earmark-check-fill"></i> Apply
+              <i class="bi bi-file-earmark-check-fill" aria-hidden="true"></i> Apply
             </button>
             <a
               class="button has-icon is-primary-50"
               th:href="@{/account/sign-in(redirectURL=${currentURL})}"
               sec:authorize="!isAuthenticated()"
             >
-              <i class="bi bi-file-earmark-check-fill"></i> Sign in to apply
+              <i class="bi bi-file-earmark-check-fill" aria-hidden="true"></i> Sign in to apply
             </a>
           </th:block>
 
@@ -104,6 +104,6 @@
           </div>
         </div>
       </form>
-    </div>
+    </main>
   </body>
 </html>

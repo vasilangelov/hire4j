@@ -19,8 +19,8 @@
                 <input id="search-filter" type="search" name="search" class="input" placeholder="Java" th:value="${param.search}" />
               </div>
 
-              <button type="submit" class="shrink-0 button is-1/1 is-lg">
-                <i class="bi bi-search"></i>
+              <button type="submit" class="shrink-0 button is-1/1 is-lg" aria-label="Search">
+                <i class="bi bi-search" aria-hidden="true"></i>
               </button>
             </div>
 
@@ -93,7 +93,7 @@
                 <th:block th:text="${jobListing.getOrganizationName()}"></th:block>
               </div>
               <div class="pill is-primary-50 is-lg">
-                <i class="bi bi-geo-alt-fill"></i>
+                <i class="bi bi-geo-alt-fill" aria-hidden="true"></i>
 
                 <th:block th:text="${!jobListing.getLocation().isBlank()} ? ${jobListing.getLocation()} : 'Remote'"></th:block>
               </div>
@@ -111,9 +111,10 @@
               <a
                 class="button has-icon is-sm"
                 th:href="@{/job-listings/{id}(id=${jobListing.getId()})}"
+                th:aria-label="'Read more about ' + ${jobListing.getTitle()}"
               >
                 Read more
-                <i class="bi bi-arrow-right"></i>
+                <i class="bi bi-arrow-right" aria-hidden="true"></i>
               </a>
             </div>
           </div>

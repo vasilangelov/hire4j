@@ -4,7 +4,7 @@
     <title></title>
   </head>
   <body th:replace="~{layouts/root :: body (content=~{::#main-content})}">
-    <div id="main-content" class="flex flex-col gap-4 container">
+    <main id="main-content" class="flex flex-col gap-4 container">
       <div>
         <h1>My Applications</h1>
         <p class="subtitle">Track applications status.</p>
@@ -36,6 +36,6 @@
             <td th:text="${jobApplication.getStatus().name()}"></td>
           </tr>
       </table>
-    </div>
+    </main>
   </body>
 </html>

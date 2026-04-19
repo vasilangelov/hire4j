@@ -5,7 +5,7 @@
   </head>
   <body th:replace="~{layouts/root :: body (content=~{::#main-content}, scripts=~{::script})}">
     <div id="main-content" class="flex flex-col gap-12 container">
-      <div class="flex justify-between gap-12 items-center max-h-150">
+      <main class="flex justify-between gap-12 items-center max-h-150">
         <div class="flex flex-col gap-12">
           <div class="flex flex-col gap-4">
             <h1>Find your next <span id="text-container" class="font-bold" style="font-size: inherit; line-height: inherit">dream job</span></h1>
@@ -32,7 +32,7 @@
         <div class="min-h-0 self-stretch">
           <img src="/media/hero.svg" alt="" class="w-full h-full" />
         </div>
-      </div>
+      </main>
 
       <section class="flex flex-col gap-4" th:unless="${latestJobListings.isEmpty()}">
         <h2>See latest job offers</h2>
@@ -65,6 +65,7 @@
                 <a
                   class="button has-icon is-sm"
                   th:href="@{/job-listings/{id}(id=${jobListing.getId()})}"
+                  th:aria-label="'Read more about ' + ${jobListing.getTitle()}"
                 >
                   Read more
                   <i class="bi bi-arrow-right"></i>
@@ -73,7 +74,7 @@
             </div>
           </div>
 
-          <p class="text-center">To find more see the <a class="link">Job offers page</a></p>
+          <p class="text-center mb-12">To find more see the <a class="link" th:href="@{/job-listings}">Job offers page</a></p>
         </div>
       </section>
     </div>
